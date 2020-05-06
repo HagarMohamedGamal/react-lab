@@ -1,0 +1,6 @@
+<DrawArea>
+    <Rectangle x="0" y="0" width="10" height="5"/>
+    <Square x="0" y="0" length="5"/>
+    <Oval x="0" y="0" A="10" B="5"/>
+    <Circle x="0" y="0" R="5"/>
+</DrawArea>

@@ -9,16 +9,34 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  Redirect
 } from "react-router-dom";
 
 
 class App extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
+    this.state = {
+      loggedIn: false,
+    }
   }
-  render(){
-    return (
+
+  logIn = () => {
+    console.log(this.state);
+    if (this.state.loggedIn == true) {
+      localStorage.removeItem("name")
+      this.setState({ loggedIn: false })
+    }
+    else {
+      this.setState({ loggedIn: true })
+    }
+  }
+
+
+  render() {
+    if (!localStorage.getItem("name"))
+      return (
         <Router>
           <div>
             <nav>
@@ -39,7 +57,35 @@ class App extends React.Component {
                 <SignUp />
               </Route>
               <Route path="/login">
-                <SignIn />
+                <SignIn logIn={this.logIn} loginState={this.state.loggedIn} />
+              </Route>
+              <Route path="/">
+                <Redirect to='/login' />
+              </Route>
+            </Switch>
+          </div>
+        </Router>
+      );
+    else {
+      return (
+        <Router>
+          <div>
+            <nav>
+              <ul>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  {localStorage.getItem("name")}
+                </li>
+                <li>
+                  <Link to="/logout" onClick={this.logIn}>Logout</Link>
+                </li>
+              </ul>
+            </nav>
+            <Switch>
+              <Route path="/logout">
+                <Redirect to='/' />
               </Route>
               <Route path="/">
                 <TodoContainer />
@@ -47,7 +93,8 @@ class App extends React.Component {
             </Switch>
           </div>
         </Router>
-    );
+      );
+    }
   }
 }
 
